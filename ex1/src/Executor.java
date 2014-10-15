@@ -24,12 +24,13 @@ class Executor extends Thread {
 		p1.start();
 		counter.release();
 
-		make2kTree(p1, counter, 1);
+		make2kTree(p1, counter);
 	}
 
-	private void make2kTree(Production production, Counter counter, int k) {
+	private void make2kTree(Production production, Counter counter) {
 		Queue<Production> queue = new LinkedList();
 		queue.add(production);
+		int k = 1;
 		while (!queue.isEmpty()) {
 			Iterator<Production> i = queue.iterator();
 			List<Production> l = new LinkedList();

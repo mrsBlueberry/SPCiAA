@@ -163,8 +163,8 @@ class Executor extends Thread {
 		}
 		
 		for(int i=0;i<treesByLevel.get(idx).size();++i){
-			System.out.println("x"+i+"="+treesByLevel.get(idx).get(i).m_b[1]);
-			System.out.println("x"+(i+1)+"="+treesByLevel.get(idx).get(i).m_b[2]);
+			System.out.println("x"+i+"="+treesByLevel.get(idx).get(i).m_x[1]);
+			System.out.println("x"+(i+1)+"="+treesByLevel.get(idx).get(i).m_x[2]);
 
 		}
 	}

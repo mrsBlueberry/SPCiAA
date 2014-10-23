@@ -9,6 +9,17 @@
 
 
 class Vertex {
+	//label
+		String m_label;
+		//links to adjacent elements
+		Vertex m_left;
+		Vertex m_right;
+		Vertex m_parent;
+
+		//local system of equations
+		double[][] m_a;
+		double[] m_b;
+		double[] m_x;
 	//constructor
 	Vertex(Vertex Left, Vertex Right, Vertex Parent, String Lab){
 		this.m_left=Left;
@@ -17,6 +28,7 @@ class Vertex {
 		this.m_label=Lab;
 		m_a = new double[3][3];
 		m_b = new double[3];
+		m_x = new double[3];
 	}
 	//empty constructor
 	Vertex(){
@@ -25,17 +37,9 @@ class Vertex {
 		this.m_parent=null;
 		m_a = new double[3][3];
 		m_b = new double[3];
+		m_x = new double[3];
 	}
-	//label
-	String m_label;
-	//links to adjacent elements
-	Vertex m_left;
-	Vertex m_right;
-	Vertex m_parent;
-
-	//local system of equations
-	double[][] m_a;
-	double[] m_b;
+	
 
 	//methods for adding links
 	void set_left(Vertex Left){

@@ -126,8 +126,8 @@ class Executor extends Thread {
 		A1 a1 = new A1(treesByLevel.get(idx).get(0), counter);
 		a1.start();
 		for(int i=1;i<idx-1;++i){
-			A2 a2 = new A2(treesByLevel.get(idx).get(i), counter);
-			a2.start();
+			A a = new A(treesByLevel.get(idx).get(i), counter);
+			a.start();
 		}
 		AN an = new AN(treesByLevel.get(idx).get(idx), counter);
 		an.start();

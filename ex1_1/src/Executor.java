@@ -131,6 +131,8 @@ class Executor extends Thread {
 		}
 		AN an = new AN(treesByLevel.get(idx).get(treesByLevel.get(idx).size()-1), counter);
 		an.start();
+		
+		
 		counter.release();
 		for(int i=idx-1;i>0;--i){
 			for(Vertex v : treesByLevel.get(i)){

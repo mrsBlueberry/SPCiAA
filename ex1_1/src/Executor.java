@@ -139,6 +139,7 @@ class Executor extends Thread {
 				A2 a2 = new A2(v, counter);
 				a2.start();
 			}
+			
 			counter.release();
 			for(Vertex v : treesByLevel.get(i)){
 				E2 e2 = new E2(v, counter);

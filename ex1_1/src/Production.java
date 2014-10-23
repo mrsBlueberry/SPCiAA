@@ -229,6 +229,10 @@ class BS extends Production {
 		System.out.println("BS");
 		if (T.m_label.equals("node"))
 			return T;
+		T.m_b[0]=(T.m_b[0]-T.m_a[0][1]*T.m_b[1]-T.m_a[0][2]*T.m_b[2])/T.m_a[0][0];
+		T.m_a[0][0] = 1.0;
+		T.m_a[0][1] = 0.0;
+		T.m_a[0][2] = 0.0;
 		T.m_left.m_a[1][0] = 0.0;
 		T.m_left.m_a[1][1] = 1.0;
 		T.m_left.m_a[1][2] = 0.0;

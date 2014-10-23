@@ -15,6 +15,8 @@ import java.util.Queue;
 
 class Executor extends Thread {
 	private int power = 3;
+	List<List<Vertex>> treesByLevel = new ArrayList();
+	
 
 	public synchronized void run() {
 		Counter counter = new Counter(this);
@@ -118,7 +120,50 @@ class Executor extends Thread {
 		
 		System.err.println("u1="+u1+"\nu2="+u2+"\nu3="+u3+"\nu4="+u4+"\nu5="+u5+"\nu6="+u6+"\nu7="+u7);
 		
+		make2kTree(p1, counter);
+		traverse(p1.m_vertex, 0);
+		int idx = treesByLevel.size()-1;
+		A1 a1 = new A1(treesByLevel.get(idx).get(0), counter);
+		a1.start();
+		for(int i=1;i<idx-1;++i){
+			A2 a2 = new A2(treesByLevel.get(idx).get(i), counter);
+			a2.start();
+		}
+		AN an = new AN(treesByLevel.get(idx).get(idx), counter);
+		an.start();
+		counter.release();
+		for(int i=idx-1;i>0;--i){
+			for(Vertex v : treesByLevel.get(i)){
+				A2 a2 = new A2(v, counter);
+				a2.start();
+			}
+			counter.release();
+			for(Vertex v : treesByLevel.get(i)){
+				E2 e2 = new E2(v, counter);
+				e2.start();
+			}
+			counter.release();
+		}
+		Aroot aRoot = new Aroot(treesByLevel.get(0).get(0), counter);
+		aRoot.start();
+		counter.release();
+		Eroot eRoot = new Eroot(treesByLevel.get(0).get(0), counter);
+		eRoot.start();
+		counter.release();
 		
+		
+	}
+	
+	private void traverse(Vertex v, int level){
+		if(v == null){
+			return;
+		}
+		if(treesByLevel.size()== level){
+			treesByLevel.add(new ArrayList<Vertex>());
+		}
+		treesByLevel.get(level).add(v);
+		traverse(v.m_left, level+1);
+		traverse(v.m_right, level+1);
 	}
 
 	private void make2kTree(Production production, Counter counter) {

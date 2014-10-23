@@ -132,7 +132,7 @@ class Executor extends Thread {
 		AN an = new AN(treesByLevel.get(idx).get(treesByLevel.get(idx).size()-1), counter);
 		an.start();
 		counter.release();
-		for(int i=idx;i>0;--i){
+		for(int i=idx-1;i>0;--i){
 			for(Vertex v : treesByLevel.get(i)){
 				A2 a2 = new A2(v, counter);
 				a2.start();
@@ -151,7 +151,7 @@ class Executor extends Thread {
 		eRoot.start();
 		counter.release();
 		
-		for(int i=0;i<idx-1;++i){
+		for(int i=0;i<idx;++i){
 			for(Vertex v : treesByLevel.get(i)){
 				BS b = new BS(v, counter);
 				b.start();

@@ -1,62 +1,69 @@
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
 /**
  * @(#)Production.java
- *
- *
+ * 
+ * 
  * @author
  * @version 1.00 2011/6/13
  */
 
-
 abstract class Production extends Thread {
 
-	Production(Vertex Vert,Counter Count){
+	// vertex where the production will be applied
+	Vertex m_vertex;
+	// graph drawer
+	GraphDrawer m_drawer;
+	// productions counter
+	CyclicBarrier m_barrier;
+
+	Production(Vertex Vert, CyclicBarrier barrier) {
 		m_vertex = Vert;
-		m_counter = Count;
+		m_barrier = barrier;
 		m_drawer = new GraphDrawer();
 	}
 
-	//returns first vertex from the left
+	// returns first vertex from the left
 	abstract Vertex apply(Vertex v);
 
-	//run the thread
+	// run the thread
 	public void run() {
-		m_counter.inc();
 		//apply the production
 		m_vertex = apply(m_vertex);
 		//plot the graph
 		m_drawer.draw(m_vertex);
-		m_counter.dec();
+		try {
+			m_barrier.await();
+		} catch (InterruptedException | BrokenBarrierException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-
-	//vertex where the production will be applied
-	Vertex m_vertex;
-	//graph drawer
-	GraphDrawer m_drawer;
-	//productions counter
-	Counter m_counter;
 }
 
 class P1 extends Production {
-	P1(Vertex Vert,Counter Count){
-		super(Vert,Count);
+	P1(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
+
 	Vertex apply(Vertex S) {
-	  System.out.println("p1");
-	  Vertex T1 = new Vertex(null,null,S,"T");
-	  Vertex T2 = new Vertex(null,null,S,"T");
-	  S.set_left(T1);
-	  S.set_right(T2);
-	  S.set_label("root");
-	  return S;
+		System.out.println("p1");
+		Vertex T1 = new Vertex(null, null, S, "T");
+		Vertex T2 = new Vertex(null, null, S, "T");
+		S.set_left(T1);
+		S.set_right(T2);
+		S.set_label("root");
+		return S;
 	}
 }
 
-class P2 extends Production{
-	P2(Vertex vert, Counter count){
-		super(vert, count);
+class P2 extends Production {
+	P2(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
-	
-	Vertex apply(Vertex vert){
+
+	Vertex apply(Vertex vert) {
 		System.out.println("p2");
 		Vertex t1 = new Vertex(null, null, vert, "T");
 		Vertex t2 = new Vertex(null, null, vert, "T");
@@ -67,12 +74,12 @@ class P2 extends Production{
 	}
 }
 
-class P3 extends Production{
-	P3(Vertex vert, Counter count){
-		super(vert, count);
+class P3 extends Production {
+	P3(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
-	
-	Vertex apply(Vertex vert){
+
+	Vertex apply(Vertex vert) {
 		System.out.println("p3");
 		Vertex t1 = new Vertex(null, null, vert, "node");
 		Vertex t2 = new Vertex(null, null, vert, "node");
@@ -83,29 +90,29 @@ class P3 extends Production{
 	}
 }
 
-class A extends Production{
+class A extends Production {
 
-	A(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	A(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	@Override
 	Vertex apply(Vertex vert) {
 		System.out.println("A");
-		vert.m_a[1][1]=-1.0;
-		vert.m_a[2][1]=1.0;
-		vert.m_a[1][2]=1.0;
-		vert.m_a[2][2]=-1.0;
-		vert.m_b[1]=0.0;
-		vert.m_b[2]=0.0;
+		vert.m_a[1][1] = -1.0;
+		vert.m_a[2][1] = 1.0;
+		vert.m_a[1][2] = 1.0;
+		vert.m_a[2][2] = -1.0;
+		vert.m_b[1] = 0.0;
+		vert.m_b[2] = 0.0;
 		return vert;
 	}
-	
+
 }
 
 class A1 extends Production {
-	A1(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	A1(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	Vertex apply(Vertex vert) {
@@ -121,8 +128,8 @@ class A1 extends Production {
 }
 
 class AN extends Production {
-	AN(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	AN(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	Vertex apply(Vertex T) {
@@ -138,8 +145,8 @@ class AN extends Production {
 }
 
 class A2 extends Production {
-	A2(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	A2(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	Vertex apply(Vertex T) {
@@ -161,8 +168,8 @@ class A2 extends Production {
 }
 
 class E2 extends Production {
-	E2(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	E2(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	Vertex apply(Vertex T) {
@@ -183,24 +190,24 @@ class E2 extends Production {
 	}
 }
 
-class Aroot extends A2{
+class Aroot extends A2 {
 
-	Aroot(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	Aroot(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
-	
+
 }
 
 class Eroot extends Production {
-	Eroot(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	Eroot(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	Vertex apply(Vertex T) {
 		System.out.println("Eroot");
-		
-//		T.m_x = GaussianElimination.lsolve(T.m_a, T.m_b);
-		
+
+		// T.m_x = GaussianElimination.lsolve(T.m_a, T.m_b);
+
 		T.m_b[1] /= T.m_a[1][1];
 		T.m_a[1][2] /= T.m_a[1][1];
 		T.m_a[1][1] /= T.m_a[1][1];
@@ -219,18 +226,19 @@ class Eroot extends Production {
 		T.m_a[0][1] -= T.m_a[1][1] * T.m_a[0][1];
 		T.m_b[0] /= T.m_a[0][0];
 		T.m_a[0][0] /= T.m_a[0][0];
-		
-		T.m_x[2] = T.m_b[2];//T.m_b[2] / T.m_a[2][2];
-		T.m_x[1] = T.m_b[1];//(T.m_b[1] - T.m_a[1][2] * T.m_x[2])/T.m_a[1][1];
-		T.m_x[0] = T.m_b[0];//(T.m_b[0] - T.m_a[0][1] * T.m_x[1] - T.m_a[0][2] * T.m_x[2])/T.m_a[0][0]; 
-				
+
+		T.m_x[2] = T.m_b[2];// T.m_b[2] / T.m_a[2][2];
+		T.m_x[1] = T.m_b[1];// (T.m_b[1] - T.m_a[1][2] * T.m_x[2])/T.m_a[1][1];
+		T.m_x[0] = T.m_b[0];// (T.m_b[0] - T.m_a[0][1] * T.m_x[1] - T.m_a[0][2]
+							// * T.m_x[2])/T.m_a[0][0];
+
 		return T;
 	}
 }
 
 class BS extends Production {
-	BS(Vertex Vert, Counter Count) {
-		super(Vert, Count);
+	BS(Vertex vert, CyclicBarrier barrier) {
+		super(vert, barrier);
 	}
 
 	@Override
@@ -238,17 +246,21 @@ class BS extends Production {
 		System.out.println("BS");
 		if (T.m_label.equals("node"))
 			return T;
-		
+
 		T.m_left.m_x[1] = T.m_x[1];
 		T.m_left.m_x[2] = T.m_x[0];
-		
-		T.m_left.m_x[0] = (T.m_left.m_b[0] - T.m_left.m_a[0][1] * T.m_left.m_x[1] - T.m_left.m_a[0][2] * T.m_left.m_x[2])/T.m_left.m_a[0][0]; 
-		
+
+		T.m_left.m_x[0] = (T.m_left.m_b[0] - T.m_left.m_a[0][1]
+				* T.m_left.m_x[1] - T.m_left.m_a[0][2] * T.m_left.m_x[2])
+				/ T.m_left.m_a[0][0];
+
 		T.m_right.m_x[1] = T.m_x[0];
 		T.m_right.m_x[2] = T.m_x[2];
-		
-		T.m_right.m_x[0] = (T.m_right.m_b[0] - T.m_right.m_a[0][1] * T.m_right.m_x[1] - T.m_right.m_a[0][2] * T.m_right.m_x[2])/T.m_right.m_a[0][0]; 
-		
+
+		T.m_right.m_x[0] = (T.m_right.m_b[0] - T.m_right.m_a[0][1]
+				* T.m_right.m_x[1] - T.m_right.m_a[0][2] * T.m_right.m_x[2])
+				/ T.m_right.m_a[0][0];
+
 		return T;
 	}
 }

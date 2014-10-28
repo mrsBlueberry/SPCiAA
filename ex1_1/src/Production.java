@@ -199,6 +199,8 @@ class Eroot extends Production {
 	Vertex apply(Vertex T) {
 		System.out.println("Eroot");
 		
+//		T.m_x = GaussianElimination.lsolve(T.m_a, T.m_b);
+		
 		T.m_b[1] /= T.m_a[1][1];
 		T.m_a[1][2] /= T.m_a[1][1];
 		T.m_a[1][1] /= T.m_a[1][1];
@@ -217,11 +219,11 @@ class Eroot extends Production {
 		T.m_a[0][1] -= T.m_a[1][1] * T.m_a[0][1];
 		T.m_b[0] /= T.m_a[0][0];
 		T.m_a[0][0] /= T.m_a[0][0];
-
-		T.m_x[2] = T.m_b[2];
-		T.m_x[1] = T.m_b[1];
-		T.m_x[0] = T.m_b[0];
 		
+		T.m_x[2] = T.m_b[2];//T.m_b[2] / T.m_a[2][2];
+		T.m_x[1] = T.m_b[1];//(T.m_b[1] - T.m_a[1][2] * T.m_x[2])/T.m_a[1][1];
+		T.m_x[0] = T.m_b[0];//(T.m_b[0] - T.m_a[0][1] * T.m_x[1] - T.m_a[0][2] * T.m_x[2])/T.m_a[0][0]; 
+				
 		return T;
 	}
 }
@@ -231,22 +233,21 @@ class BS extends Production {
 		super(Vert, Count);
 	}
 
+	@Override
 	Vertex apply(Vertex T) {
 		System.out.println("BS");
 		if (T.m_label.equals("node"))
 			return T;
-
+		
 		T.m_left.m_x[1] = T.m_x[1];
 		T.m_left.m_x[2] = T.m_x[0];
-
-		T.m_left.m_x[0] = (T.m_left.m_b[0] - T.m_left.m_a[0][1]
-				* T.m_left.m_x[1] - T.m_left.m_a[0][2] * T.m_left.m_x[2])
-				/ T.m_left.m_a[0][0];
-
+		
+		T.m_left.m_x[0] = (T.m_left.m_b[0] - T.m_left.m_a[0][1] * T.m_left.m_x[1] - T.m_left.m_a[0][2] * T.m_left.m_x[2])/T.m_left.m_a[0][0]; 
+		
 		T.m_right.m_x[1] = T.m_x[0];
 		T.m_right.m_x[2] = T.m_x[2];
 		
-
+		T.m_right.m_x[0] = (T.m_right.m_b[0] - T.m_right.m_a[0][1] * T.m_right.m_x[1] - T.m_right.m_a[0][2] * T.m_right.m_x[2])/T.m_right.m_a[0][0]; 
 		
 		return T;
 	}

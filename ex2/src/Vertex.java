@@ -20,6 +20,7 @@ class Vertex {
 		double[][] m_a;
 		double[] m_b;
 		double[] m_x;
+		double[] m_x_old;
 	//constructor
 	Vertex(Vertex Left, Vertex Right, Vertex Parent, String Lab){
 		this.m_left=Left;
@@ -29,6 +30,10 @@ class Vertex {
 		m_a = new double[3][3];
 		m_b = new double[3];
 		m_x = new double[3];
+		m_x_old = new double[3];
+		m_x_old[0] = 0.0;
+		m_x_old[1] = 0.0;
+		m_x_old[2] = 0.0;
 	}
 	//empty constructor
 	Vertex(){

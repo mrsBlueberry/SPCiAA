@@ -17,7 +17,8 @@ abstract class Production extends Thread {
 	GraphDrawer m_drawer;
 	// productions counter
 	CyclicBarrier m_barrier;
-	public static int h = 1;
+	public static double h = 1.0;
+	public static double dt = 0.001;
 
 	Production(Vertex Vert, CyclicBarrier barrier) {
 		m_vertex = Vert;
@@ -100,12 +101,14 @@ class A extends Production {
 	@Override
 	Vertex apply(Vertex vert) {
 		System.out.println("A");
-		vert.m_a[1][1] = h/3;
-		vert.m_a[2][1] = h/6;
-		vert.m_a[1][2] = h/6;
-		vert.m_a[2][2] = h/3;
-		vert.m_b[1] = 0.0;
-		vert.m_b[2] = 0.0;
+		vert.m_a[1][1] = h/3.0;
+		vert.m_a[2][1] = h/6.0;
+		vert.m_a[1][2] = h/6.0;
+		vert.m_a[2][2] = h/3.0;
+		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
+				- dt * (vert.m_x_old[1] - vert.m_x_old[2] - 1);
+		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
+				- dt * (-vert.m_x_old[1] + vert.m_x_old[2]);
 		return vert;
 	}
 
@@ -118,11 +121,14 @@ class A1 extends Production {
 
 	Vertex apply(Vertex vert) {
 		System.out.println("A");
-		vert.m_a[1][1] = h/3;
-		vert.m_a[2][1] = h/6;
-		vert.m_a[1][2] = h/6;
-		vert.m_a[2][2] = h/3;
-		vert.m_b[1] = 0.0;
+		vert.m_a[1][1] = h/3.0;
+		vert.m_a[2][1] = h/6.0;
+		vert.m_a[1][2] = h/6.0;
+		vert.m_a[2][2] = h/3.0;
+		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
+				- dt * (vert.m_x_old[1] - vert.m_x_old[2]);
+		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
+				- dt * (-vert.m_x_old[1] + vert.m_x_old[2]);vert.m_b[1] = 0.0;
 		vert.m_b[2] = 0.0;
 		return vert;
 	}
@@ -133,15 +139,17 @@ class AN extends Production {
 		super(vert, barrier);
 	}
 
-	Vertex apply(Vertex T) {
+	Vertex apply(Vertex vert) {
 		System.out.println("AN");
-		T.m_a[1][1] = -1.0;
-		T.m_a[2][1] = 0.0;
-		T.m_a[1][2] = 1.0;
-		T.m_a[2][2] = 1.0;
-		T.m_b[1] = 0.0;
-		T.m_b[2] = h;
-		return T;
+		vert.m_a[1][1] = h/3.0;
+		vert.m_a[2][1] = h/6.0;
+		vert.m_a[1][2] = h/6.0;
+		vert.m_a[2][2] = h/3.0;
+		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
+				- dt * (vert.m_x_old[1] - vert.m_x_old[2] - 1);
+		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
+				- dt * (-vert.m_x_old[1] + vert.m_x_old[2] + 1);
+		return vert;
 	}
 }
 

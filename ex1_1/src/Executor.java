@@ -16,7 +16,7 @@ import java.util.concurrent.CyclicBarrier;
 
 
 class Executor extends Thread {
-	private int power = 5;
+	private int power = 3;
 	List<List<Vertex>> treesByLevel = new ArrayList();
 	
 
@@ -81,13 +81,16 @@ class Executor extends Thread {
 			List<Double> result = new ArrayList<>();
 			System.out.println("x0" + "="
 					+ treesByLevel.get(idx).get(0).m_x[1]);
-			result.add(treesByLevel.get(idx).get(0).m_x[1]);
-			for (int i = 1; i < treesByLevel.get(idx).size(); ++i) {
-				System.out.println("x" + i + "="
-						+ treesByLevel.get(idx).get(i).m_x[2]);
-				result.add(treesByLevel.get(idx).get(i).m_x[2]);
+//			result.add(treesByLevel.get(idx).get(0).m_x[1]);
+			for (int i = 0; i < treesByLevel.get(idx).size(); ++i) {
+//				System.out.println("x0" + "="
+//						+ treesByLevel.get(idx).get(i).m_x[1]);
+//				System.out.println("x" + i + "="
+//						+ treesByLevel.get(idx).get(i).m_x[2]);
+				result.add(treesByLevel.get(idx).get(i).m_x[1]);
 
 			}
+			result.add(treesByLevel.get(idx).get(treesByLevel.get(idx).size()-1).m_x[2]);
 			ResultPrinter.printResult(result);
 		} catch (InterruptedException | BrokenBarrierException e) {
 			// TODO Auto-generated catch block
@@ -110,7 +113,7 @@ class Executor extends Thread {
 	private void make2kTree(Production production) {
 		Queue<Production> queue = new LinkedList();
 		queue.add(production);
-		int k = 1;
+		int k = 2;
 		while (!queue.isEmpty()) {
 			Iterator<Production> i = queue.iterator();
 			List<Production> l = new LinkedList();

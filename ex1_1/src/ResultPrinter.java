@@ -17,7 +17,6 @@ public class ResultPrinter {
 		Plot2DPanel plot = new Plot2DPanel();
 		// add a line plot to the PlotPanel
 		plot.addLinePlot("my plot", x, y);
-//		plot.
 		// put the PlotPanel in a JFrame, as a JPanel
 		JFrame frame = new JFrame("a plot panel");
 		frame.setContentPane(plot);

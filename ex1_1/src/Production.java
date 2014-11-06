@@ -17,7 +17,6 @@ abstract class Production extends Thread {
 	GraphDrawer m_drawer;
 	// productions counter
 	CyclicBarrier m_barrier;
-	public static int h = 1;
 
 	Production(Vertex Vert, CyclicBarrier barrier) {
 		m_vertex = Vert;
@@ -100,10 +99,10 @@ class A extends Production {
 	@Override
 	Vertex apply(Vertex vert) {
 		System.out.println("A");
-		vert.m_a[1][1] = h/3;
-		vert.m_a[2][1] = h/6;
-		vert.m_a[1][2] = h/6;
-		vert.m_a[2][2] = h/3;
+		vert.m_a[1][1] = -1.0;
+		vert.m_a[2][1] = 1.0;
+		vert.m_a[1][2] = 1.0;
+		vert.m_a[2][2] = -1.0;
 		vert.m_b[1] = 0.0;
 		vert.m_b[2] = 0.0;
 		return vert;
@@ -118,10 +117,10 @@ class A1 extends Production {
 
 	Vertex apply(Vertex vert) {
 		System.out.println("A");
-		vert.m_a[1][1] = h/3;
-		vert.m_a[2][1] = h/6;
-		vert.m_a[1][2] = h/6;
-		vert.m_a[2][2] = h/3;
+		vert.m_a[1][1] = 1.0;
+		vert.m_a[2][1] = 1.0;
+		vert.m_a[1][2] = 0.0;
+		vert.m_a[2][2] = -1.0;
 		vert.m_b[1] = 0.0;
 		vert.m_b[2] = 0.0;
 		return vert;
@@ -140,7 +139,7 @@ class AN extends Production {
 		T.m_a[1][2] = 1.0;
 		T.m_a[2][2] = 1.0;
 		T.m_b[1] = 0.0;
-		T.m_b[2] = h;
+		T.m_b[2] = 1.0;
 		return T;
 	}
 }

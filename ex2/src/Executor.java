@@ -17,7 +17,7 @@ import java.util.concurrent.CyclicBarrier;
 
 class Executor extends Thread {
 	private int power = 3;
-	List<List<Vertex>> treesByLevel = new ArrayList();
+	List<List<Vertex>> treesByLevel = new ArrayList<>();
 	
 
 	public synchronized void run() {

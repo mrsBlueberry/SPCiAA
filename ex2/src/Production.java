@@ -105,6 +105,10 @@ class A extends Production {
 		vert.m_a[2][1] = h/6.0;
 		vert.m_a[1][2] = h/6.0;
 		vert.m_a[2][2] = h/3.0;
+		// copying values to m_x_old for next iteration
+		vert.m_x_old[0] = vert.m_x[0];
+		vert.m_x_old[1] = vert.m_x[1];
+		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
 				- dt * (vert.m_x_old[1] - vert.m_x_old[2]);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
@@ -125,6 +129,10 @@ class A1 extends Production {
 		vert.m_a[2][1] = h/6.0;
 		vert.m_a[1][2] = h/6.0;
 		vert.m_a[2][2] = h/3.0;
+		//copying values to m_x_old for next iteration
+		vert.m_x_old[0] = vert.m_x[0];
+		vert.m_x_old[1] = vert.m_x[1];
+		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
 				- dt * (vert.m_x_old[1] - vert.m_x_old[2] - 1);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
@@ -144,6 +152,10 @@ class AN extends Production {
 		vert.m_a[2][1] = h/6.0;
 		vert.m_a[1][2] = h/6.0;
 		vert.m_a[2][2] = h/3.0;
+		// copying values to m_x_old for next iteration
+		vert.m_x_old[0] = vert.m_x[0];
+		vert.m_x_old[1] = vert.m_x[1];
+		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
 				- dt * (vert.m_x_old[1] - vert.m_x_old[2]);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0

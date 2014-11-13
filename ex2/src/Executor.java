@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 class Executor extends Thread {
-	private int power = 3;
+	private int power = 4;
 	List<List<Vertex>> treesByLevel = new ArrayList<>();
 	private CyclicBarrier barrier;
 
@@ -71,7 +71,7 @@ class Executor extends Thread {
 	public synchronized void run() {
 
 		Vertex S = new Vertex(null, null, null, "S");
-
+		Production.h = 1.0/(Math.pow(2.0, power) -1.0);
 		makeBarrier(1);
 		P1 p1 = new P1(S, barrier);
 		p1.start();
@@ -79,7 +79,7 @@ class Executor extends Thread {
 
 		make2kTree(p1);
 		traverse(p1.m_vertex, 0);
-		for (int t = 0; t < 1000; ++t) {
+		for (int t = 0; t < 10000; ++t) {
 
 			makeBarrier(leafCount());
 			A1 a1 = new A1(firstLeaf(), barrier);

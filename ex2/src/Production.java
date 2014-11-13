@@ -17,8 +17,8 @@ abstract class Production extends Thread {
 	GraphDrawer m_drawer;
 	// productions counter
 	CyclicBarrier m_barrier;
-	public static double h = 1.0;
-	public static double dt = 0.01;
+	public static double h;
+	public static double dt = 0.0001;
 
 	Production(Vertex Vert, CyclicBarrier barrier) {
 		m_vertex = Vert;

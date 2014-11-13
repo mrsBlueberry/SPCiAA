@@ -18,7 +18,7 @@ abstract class Production extends Thread {
 	// productions counter
 	CyclicBarrier m_barrier;
 	public static double h = 1.0;
-	public static double dt = 0.001;
+	public static double dt = 0.01;
 
 	Production(Vertex Vert, CyclicBarrier barrier) {
 		m_vertex = Vert;
@@ -110,9 +110,9 @@ class A extends Production {
 		vert.m_x_old[1] = vert.m_x[1];
 		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
-				- dt * (vert.m_x_old[1] - vert.m_x_old[2]);
+				- dt * (vert.m_x_old[1] / h - vert.m_x_old[2] / h);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
-				- dt * (-vert.m_x_old[1] + vert.m_x_old[2]);
+				- dt * (-vert.m_x_old[1] / h + vert.m_x_old[2] / h);
 		return vert;
 	}
 
@@ -134,9 +134,9 @@ class A1 extends Production {
 		vert.m_x_old[1] = vert.m_x[1];
 		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
-				- dt * (vert.m_x_old[1] - vert.m_x_old[2] - 1);
+				- dt * (vert.m_x_old[1] / h - vert.m_x_old[2] / h - 1 + vert.m_x_old[1]);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
-				- dt * (-vert.m_x_old[1] + vert.m_x_old[2]);
+				- dt * (-vert.m_x_old[1]/h + vert.m_x_old[2]/h);
 		return vert;
 	}
 }
@@ -157,9 +157,9 @@ class AN extends Production {
 		vert.m_x_old[1] = vert.m_x[1];
 		vert.m_x_old[2] = vert.m_x[2];
 		vert.m_b[1] = vert.m_x_old[1] * h / 3.0 + vert.m_x_old[2] * h / 6.0
-				- dt * (vert.m_x_old[1] - vert.m_x_old[2]);
+				- dt * (vert.m_x_old[1] / h - vert.m_x_old[2] / h);
 		vert.m_b[2] = vert.m_x_old[1] * h / 6.0 + vert.m_x_old[2] * h / 3.0
-				- dt * (-vert.m_x_old[1] + vert.m_x_old[2] + 1);
+				- dt * (-vert.m_x_old[1] / h + vert.m_x_old[2] / h + 1 + vert.m_x_old[2]);
 		return vert;
 	}
 }

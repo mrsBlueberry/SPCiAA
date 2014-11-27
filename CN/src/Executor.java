@@ -79,7 +79,7 @@ class Executor extends Thread {
 
 		make2kTree(p1);
 		traverse(p1.m_vertex, 0);
-		for (int t = 0; t < 10000; ++t) {
+		for (int t = 0; t < 100000; ++t) {
 
 			makeBarrier(leafCount());
 			A1 a1 = new A1(firstLeaf(), barrier);
@@ -127,6 +127,7 @@ class Executor extends Thread {
 				sync();
 			}
 
+			
 			// Output
 			if (t % 100 == 0) {
 				List<Double> result = new ArrayList<>();
@@ -135,8 +136,10 @@ class Executor extends Thread {
 				}
 				result.add(lastLeaf().m_x[2]);
 				ResultPrinter.printResult(result);
-				delay(1000);
+				delay(200);
+				System.out.println(t);
 			}
+			
 		}
 
 		System.out.println("Done.");

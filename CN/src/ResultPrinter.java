@@ -27,6 +27,7 @@ public class ResultPrinter {
             x[i] = i / (double) (result.size() - 1);
         }
 
+        plot.removeAllPlots();
         plot.addLinePlot("my plot", x, y);
 //		double[] y = new double[result.size()];
 //		double[] x = new double[result.size()];

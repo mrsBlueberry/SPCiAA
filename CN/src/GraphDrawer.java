@@ -15,11 +15,11 @@ class GraphDrawer {
 	void draw(Vertex v) {
         //plot the tree in the pre-order
         //go up to the root
-	  while(v.m_parent!=null) {
-		v=v.m_parent;
-	  }
+//	  while(v.m_parent!=null) {
+//		v=v.m_parent;
+//	  }
 	  //plot
-	  plot_preorder(v);
+//	  plot_preorder(v);
 	}
 	void plot_preorder(Vertex v)
 	{

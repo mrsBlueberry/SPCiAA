@@ -71,7 +71,7 @@ class Executor extends Thread {
 	public synchronized void run() {
 
 		Vertex S = new Vertex(null, null, null, "S");
-		Production.h = 1.0/(Math.pow(2.0, power) -1.0);
+		Production.h = 1.0/(Math.pow(2.0, power));
 		makeBarrier(1);
 		P1 p1 = new P1(S, barrier);
 		p1.start();

@@ -79,6 +79,7 @@ class Executor extends Thread {
 
 		make2kTree(p1);
 		traverse(p1.m_vertex, 0);
+		
 		for (int t = 0; t < 100000; ++t) {
 
 			makeBarrier(leafCount());

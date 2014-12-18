@@ -15,7 +15,7 @@ import solver.grammar.VertexType;
 
 public class Application {
 
-	private Exectuor exectuor = new Exectuor();
+	private Executor exectuor = new Executor();
 	private List<List<Vertex>> treeByLevel = new ArrayList<>();
 
 	private List<Vertex> level(int lvl) {

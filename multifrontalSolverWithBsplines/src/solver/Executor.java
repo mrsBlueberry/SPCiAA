@@ -7,12 +7,12 @@ import java.util.concurrent.TimeUnit;
 
 import solver.grammar.Production;
 
-public class Exectuor {
+public class Executor {
 	
 	private ExecutorService executorService;
 	private CountDownLatch countDownLatch;
 	
-	public Exectuor(){
+	public Executor(){
 		this.executorService = Executors.newFixedThreadPool(4);
 	}
 	

@@ -4,7 +4,8 @@ public class TreeProduction extends Production{
 	
 
 	public TreeProduction(Vertex vert, VertexType type) {
-		super(vert, type);
+		super(vert);
+		this.type = type;
 		
 	}
 
@@ -15,7 +16,7 @@ public class TreeProduction extends Production{
 			vert.initializeVertex(Stuff.p*3, type, 2);		
 			break;
 		case INTERNAL:
-			vert.initializeVertex(Stuff.p*2, type, 2);
+			vert.initializeVertex(Stuff.p*3, type, 2);
 			break;
 		case LEAF_PARENT:
 			vert.initializeVertex(Stuff.p*2+1, type, Stuff.p+1);

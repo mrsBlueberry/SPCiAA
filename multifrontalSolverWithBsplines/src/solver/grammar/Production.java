@@ -10,16 +10,20 @@ public abstract class Production implements Runnable {
 	
 	
 	
-	public Production(Vertex vert, VertexType type){
+	public Production(Vertex vert){
 		
 		this.vertex = vert;
-		this.type = type;
 		
 	}
 
 	@Override
 	public void run() {
-		apply(vertex);
+		try{
+			apply(vertex);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
 		getLatch().countDown();
 		
 	}

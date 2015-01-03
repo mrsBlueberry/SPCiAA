@@ -30,7 +30,7 @@ public class Vertex {
 			this.children[i] = new Vertex(this);
 		}
 		System.out.println("initialized type: "+type);
-
+	
 	}
 	
 	public void generateRandomValues(){

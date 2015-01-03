@@ -40,7 +40,7 @@ public class MatrixUtil {
 		Random rand = new Random();
 		for (int i = 0; i < size1; ++i) {
 			for (int j = 0; j < size2; ++j) {
-				matrix[i][j] = 1;//rand.nextDouble();
+				matrix[i][j] = rand.nextDouble();
 			}
 		}
 
@@ -176,6 +176,18 @@ public class MatrixUtil {
 		}
 	}
 	
+	public static void substitute(double[][] A, double[] b, double[] x, int p) {
+        int N = A.length;
+        for (int i = 0; i < p; ++ i) {
+            for (int j = p; j < N; ++ j) {
+                b[i] -= A[i][j] * x[j - p];
+            }
+        }
+        for (int i = p; i < N; ++ i) {
+            b[i] = x[i - p];
+        }
+    }
+	
 	public static void glueMatrixes(double[][][] matrices, int interval, int omitCount, double [][] result){
 		for(int k=0;k<matrices.length;++k){
 			for(int i=omitCount;i<matrices[0].length;++i){
@@ -186,15 +198,13 @@ public class MatrixUtil {
 		}
 	}
 
-	public static double[] glueVectors(double[][] v) {
+	public static void glueVectors(double[][] v, int interval, int omitCount, double [] result) {
 		int k = v.length;
 		int N = v[0].length;
-		double[] x = new double[N + k - 1];
 		for (int i = 0; i < k; ++i) {
-			for (int j = 0; j < N; ++j)
-				x[i + j] += v[i][j];
+			for (int j = omitCount; j < N; ++j)
+				result[j + i*interval-omitCount] += v[i][j];
 		}
-		return x;
 	}
 
 	

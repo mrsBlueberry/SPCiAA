@@ -1,5 +1,7 @@
 package solver.grammar;
 
+import solver.Bspline;
+import solver.GaussQuad;
 import solver.MatrixUtil;
 
 public class Vertex {
@@ -12,9 +14,15 @@ public class Vertex {
 	public double [] x;
 	public double [] xPrev;
 	public Element element;
+	public int start;
+	public int end;
 	
-	public Vertex(Vertex parent){
+	public Vertex(Vertex parent, int st, int end){
 		this.parent = parent;
+		this.start = st;
+		this.end = end;
+		System.out.println("I'm the number " + start + " to " + end +" motherfucker!!");
+		
 	}
 	
 	public void initializeVertex(int matrixSize, VertexType type,
@@ -25,17 +33,45 @@ public class Vertex {
 		this.x = new double[matrixSize];
 		this.xPrev = new double[matrixSize];
 
+		int parentCount = end-start;
+		int step = childrenCount>2?1:parentCount/2;
+		int nextRange = start;
 		this.children = childrenCount>0?new Vertex[childrenCount]:new Vertex[0];
 		for (int i = 0; i < childrenCount; ++i) {
-			this.children[i] = new Vertex(this);
+			this.children[i] = new Vertex(this, nextRange, nextRange+ parentCount/childrenCount );
+			nextRange += step;
 		}
-		System.out.println("initialized type: "+type);
 	
 	}
 	
 	public void generateRandomValues(){
 		A = MatrixUtil.generateRandomMatrix(A.length, A.length);
 		b = MatrixUtil.generateRandomVector(b.length);
+	}
+	
+	public void generateMatrix(){
+		double[] points = GaussQuad.points(Stuff.p + 1);
+		double[] weights = GaussQuad.weights(Stuff.p + 1);
+		double intervalSt = Stuff.knotVector[Stuff.p  + start];
+		double intervalEnd = Stuff.knotVector[Stuff.p  + start + 1];
+
+		for(int i=0;i<points.length;++i){
+			double t = (points[i]+1)/2;
+			double x = t*intervalEnd + (1-t)*intervalSt;
+			for(int j=start;j<start+Stuff.p+1;++j){
+				Bspline spline = new Bspline(Stuff.knotVector, Stuff.p);
+				double cus = spline.evaluate(x, j);
+				for(int k=start;k<start+Stuff.p+1;++k){
+					double cus2 = spline.evaluate(x, k);
+					A[j-start][k-start] += cus*cus2*0.5*(intervalEnd-intervalSt)*weights[i];
+				}
+				b[j-start] += cus*0.5*(intervalEnd-intervalSt)*weights[i]*Stuff.f(x);
+				
+			}
+		}
+		
+		
+		
 	}
 
 }

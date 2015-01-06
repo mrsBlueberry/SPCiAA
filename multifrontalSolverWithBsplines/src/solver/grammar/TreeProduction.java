@@ -23,11 +23,12 @@ public class TreeProduction extends Production{
 			break;
 		case LEAF:
 			vert.initializeVertex(Stuff.p+1, type, 0);
-			vert.generateRandomValues();
+			vert.generateMatrix();
 			break;
 			
 		}
 		
 	}
+
 
 }

@@ -1,5 +1,7 @@
 package solver;
 
+import solver.grammar.Stuff;
+
 
 
 public class Main {
@@ -16,9 +18,10 @@ public class Main {
 		MatrixUtil.moveVector(vector, 2, 2);
 		MatrixUtil.printVector(vector);
 		
-		double [] knotVector = {0, 0.2, 0.4, 0.6, 0.8, 1};
+		double [] knotVector = Stuff.generateKnotVector();
 		Bspline spline = new Bspline(knotVector, 3);
-		double [] parameters = {0, 0, 1, 0, 0};
+		double [] parameters = new double[Stuff.parametersCount];
+		parameters[0] = 1;
 		int size = 1000;
 		double [] x = new double[size];
 		double[] result = new double[size];

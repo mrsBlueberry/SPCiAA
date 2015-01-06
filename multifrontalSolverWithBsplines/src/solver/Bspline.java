@@ -1,5 +1,7 @@
 package solver;
 
+import solver.grammar.Stuff;
+
 public class Bspline {
 
 	private double[] u;
@@ -33,12 +35,30 @@ public class Bspline {
         }
         return d[p][p];
     }
+	
+	public double evaluate(double x, int n){
+		double [] param = new double[Stuff.parametersCount];
+		param[n] = 1;
+		return evaluate(x, param);
+		
+	}
     private int findLastDOF(double x) {
-        int i = 0;
+    	int i = 0;
+    
+    	try{
+        
         while (i < u.length - 1 && u[i] < x) {
             ++i;
         }
+    	}catch(Exception e){
+        	e.printStackTrace();
+        	return i-1;
+        }
         return i - 1;
     }
+    
+    
+   
 
 }
+

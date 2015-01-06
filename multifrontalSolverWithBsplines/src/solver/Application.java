@@ -86,9 +86,9 @@ public class Application {
 			for (Production p : l) {
 				for (Vertex child : p.vertex.children) {
 					VertexType type;
-					if (level < Stuff.treeHeight - 1) {
+					if (level < Stuff.treeHeight - 2) {
 						type = VertexType.INTERNAL;
-					} else if (level == Stuff.treeHeight - 1) {
+					} else if (level == Stuff.treeHeight - 2) {
 						type = VertexType.LEAF_PARENT;
 					} else {
 						type = VertexType.LEAF;
@@ -106,7 +106,7 @@ public class Application {
 
 	public static void main(String[] args) {
 		Application a = new Application();
-		Vertex v = new Vertex(null);
+		Vertex v = new Vertex(null, 0, Stuff.leafCount);
 		a.exectuor.beginStage(1);
 		TreeProduction production = new TreeProduction(v, VertexType.ROOT);
 		a.exectuor.submitProduction(production);
@@ -183,9 +183,7 @@ public class Application {
 			for (Vertex node : a.level(i)) {
 				BackwardSubstitution bs = new BackwardSubstitution(node);
 				a.exectuor.submitProduction(bs);
-				System.out.println("BS for vert of type:" + node.type);
-				MatrixUtil.printVector(node.x);
-				System.out.println();
+				
 			}
 			a.exectuor.waitForEnd();
 			System.out.println("backward substitutuion done for level: " + i);
@@ -209,6 +207,23 @@ public class Application {
 		System.out.println();
 
 		MatrixUtil.printVector(solution);
+		
+		double [] knotVector = Stuff.knotVector;
+		Bspline spline = new Bspline(knotVector, Stuff.p);
+		
+		int s = 1000;
+		double [] x = new double[s];
+		double[] y = new double[s];
+	
+		double cus = 0.0;
+		for(int i=0;i<s;++i){
+			x[i] = cus;
+			cus += 1.0/s;
+			y[i] = spline.evaluate(x[i], result);
+			
+		}
+		
+		ResultPrinter.printResult(x, y);
 
 	}
 

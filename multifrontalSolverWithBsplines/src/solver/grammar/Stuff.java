@@ -10,6 +10,7 @@ public class Stuff {
 	public static int knotSize = leafCount + 2 * p + 1;
 	public static int parametersCount = knotSize - p - 1;
 	public static double [] knotVector = generateKnotVector();
+	public static double dt=0.000001;
 	
 
 	public static double f(double x){

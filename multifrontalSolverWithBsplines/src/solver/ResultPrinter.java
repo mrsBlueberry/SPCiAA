@@ -38,7 +38,7 @@ public class ResultPrinter {
 	public static void printResult(double [] x, double[] y){
 		
 
-        plot.removeAllPlots();
+//        plot.removeAllPlots();
         plot.addLinePlot("my plot", x, y);
 	}
         

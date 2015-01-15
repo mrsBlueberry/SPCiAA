@@ -17,7 +17,7 @@ public class MatrixUtil {
 
 	public static void printVector(double[] vector) {
 		for (int i = 0; i < vector.length; ++i) {
-			System.out.print(String.format("%5.2f", vector[i])+"   ");
+			System.out.print(String.format("%5.7f", vector[i])+"   ");
 		}
 	}
 	
@@ -33,6 +33,16 @@ public class MatrixUtil {
 		}
 
 		return result;
+	}
+	
+	public static void addToVecotr(double [] a, double[] b){
+		if(a.length != b.length){
+			throw new IllegalArgumentException();
+		}
+		for(int i=0;i<a.length;++i){
+			a[i]+=b[i];
+		}
+		
 	}
 
 	public static double[][] generateRandomMatrix(int size1, int size2) {

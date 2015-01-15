@@ -1,5 +1,7 @@
 package solver.grammar;
 
+import java.util.Arrays;
+
 import solver.Bspline;
 import solver.GaussQuad;
 import solver.MatrixUtil;
@@ -54,6 +56,13 @@ public class Vertex {
 		double[] weights = GaussQuad.weights(Stuff.p + 1);
 		double intervalSt = Stuff.knotVector[Stuff.p  + start];
 		double intervalEnd = Stuff.knotVector[Stuff.p  + start + 1];
+		
+		xPrev = Arrays.copyOfRange(x, 0, x.length);
+
+		Arrays.fill(b, 0);
+		for(int i =0;i<A.length;++i){
+			Arrays.fill(A[i], 0);
+		}
 
 		for(int i=0;i<points.length;++i){
 			double t = (points[i]+1)/2;
@@ -61,14 +70,24 @@ public class Vertex {
 			for(int j=start;j<start+Stuff.p+1;++j){
 				Bspline spline = new Bspline(Stuff.knotVector, Stuff.p);
 				double cus = spline.evaluate(x, j);
+				double evalD = spline.evaluateDerivative(x, j);
 				for(int k=start;k<start+Stuff.p+1;++k){
 					double cus2 = spline.evaluate(x, k);
+					double evalD2 = spline.evaluateDerivative(x, k);
 					A[j-start][k-start] += cus*cus2*0.5*(intervalEnd-intervalSt)*weights[i];
+					b[j - start] -= Stuff.dt*(evalD * evalD2 * xPrev[k - start] * 0.5
+							* (intervalEnd - intervalSt) * weights[i]
+							+ spline.evaluate(1, j) - spline.evaluate(0, j));
+					if(j==0){
+						b[j - start] += 1*Stuff.dt;
+					}
 				}
-				b[j-start] += cus*0.5*(intervalEnd-intervalSt)*weights[i]*Stuff.f(x);
+//				b[j-start] += cus*0.5*(intervalEnd-intervalSt)*weights[i]*Stuff.f(x);
 				
 			}
 		}
+		
+		MatrixUtil.addToVecotr(b,MatrixUtil.multiplyMatrixVectorLeft(A, xPrev));	
 		
 		
 		

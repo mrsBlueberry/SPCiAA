@@ -113,117 +113,103 @@ public class Application {
 		a.exectuor.waitForEnd();
 		a.makeTree(production);
 		a.traverse(v, 0);
-		int size = a.leaves().size();
-		double[][][] matrices = new double[size][][];
-		double[][] vectors = new double[size][];
 
-		for (int i = 0; i < size; ++i) {
-			matrices[i] = a.leaves().get(i).A;
-			vectors[i] = a.leaves().get(i).b;
-		}
-
-		double[][] A = new double[matrices.length - 1 + matrices[0].length][matrices.length
-				- 1 + matrices[0].length];
-
-		MatrixUtil.glueMatrixes(matrices, 1, 0, A);
-		double[] b = new double[matrices.length - 1 + matrices[0].length];
-		MatrixUtil.glueVectors(vectors, 1, 0, b);
-		// MatrixUtil.printMatrix(A);
-		double[][] A2 = new double[A.length][A[0].length];
-		for (int i = 0; i < A.length; ++i) {
-			A2[i] = Arrays.copyOf(A[i], A[0].length);
-		}
-		double[] b2 = Arrays.copyOf(b, b.length);
-		double[] solution = MatrixUtil.gaussianElimination(A, b);
-
-		for (int i = a.height() - 2; i > 0; --i) {
-
-			a.exectuor.beginStage(a.levelSize(i));
-			for (Vertex node : a.level(i)) {
-
-				int interval = node.type.equals(VertexType.LEAF_PARENT) ? 1
-						: Stuff.p;
-				int ommitCount = i == a.height() - 2 ? 0
-						: i == a.height() - 3 ? 1 : Stuff.p;
-
-				CombineChildrenProducion p = new CombineChildrenProducion(node,
-						interval, ommitCount);
-				a.exectuor.submitProduction(p);
+		for (int it = 0; it < 10000; ++it) {
+			for(Vertex vert : a.leaves()){
+				vert.generateMatrix();
 
 			}
+			for (int i = a.height() - 2; i > 0; --i) {
+
+				a.exectuor.beginStage(a.levelSize(i));
+				for (Vertex node : a.level(i)) {
+
+					int interval = node.type.equals(VertexType.LEAF_PARENT) ? 1
+							: Stuff.p;
+					int ommitCount = i == a.height() - 2 ? 0
+							: i == a.height() - 3 ? 1 : Stuff.p;
+
+					CombineChildrenProducion p = new CombineChildrenProducion(
+							node, interval, ommitCount);
+					a.exectuor.submitProduction(p);
+
+				}
+				a.exectuor.waitForEnd();
+
+				System.out.println("combined level: " + i);
+				a.exectuor.beginStage(a.levelSize(i));
+				for (Vertex node : a.level(i)) {
+
+					EliminationProduction p = new EliminationProduction(node);
+					a.exectuor.submitProduction(p);
+
+				}
+				a.exectuor.waitForEnd();
+				System.out.println("eliminated level :" + i);
+			}
+
+			a.exectuor.beginStage(1);
+			Production prod = new CombineChildrenProducion(a.root(), Stuff.p,
+					Stuff.p);
+			a.exectuor.submitProduction(prod);
 			a.exectuor.waitForEnd();
 
-			System.out.println("combined level: " + i);
-			a.exectuor.beginStage(a.levelSize(i));
-			for (Vertex node : a.level(i)) {
+			a.exectuor.beginStage(1);
+			prod = new SolveRootProduction(a.root());
+			a.exectuor.submitProduction(prod);
+			a.exectuor.waitForEnd();
 
-				EliminationProduction p = new EliminationProduction(node);
-				a.exectuor.submitProduction(p);
+			System.out.println("root solved");
+
+			for (int i = 0; i < a.height(); ++i) {
+				a.exectuor.beginStage(a.levelSize(i));
+				for (Vertex node : a.level(i)) {
+					BackwardSubstitution bs = new BackwardSubstitution(node);
+					a.exectuor.submitProduction(bs);
+
+				}
+				a.exectuor.waitForEnd();
+				System.out.println("backward substitutuion done for level: "
+						+ i);
 
 			}
-			a.exectuor.waitForEnd();
-			System.out.println("eliminated level :" + i);
-		}
+			
 
-		a.exectuor.beginStage(1);
-		Production prod = new CombineChildrenProducion(a.root(), Stuff.p,
-				Stuff.p);
-		a.exectuor.submitProduction(prod);
-		a.exectuor.waitForEnd();
+			double[] result = new double[a.leafCount() + Stuff.p];
 
-		a.exectuor.beginStage(1);
-		prod = new SolveRootProduction(a.root());
-		a.exectuor.submitProduction(prod);
-		a.exectuor.waitForEnd();
+			int count = 0;
+			for (Vertex node : a.leaves()) {
+				result[count] = node.x[0];
+				++count;
 
-		System.out.println("root solved");
-
-		for (int i = 0; i < a.height(); ++i) {
-			a.exectuor.beginStage(a.levelSize(i));
-			for (Vertex node : a.level(i)) {
-				BackwardSubstitution bs = new BackwardSubstitution(node);
-				a.exectuor.submitProduction(bs);
-				
 			}
-			a.exectuor.waitForEnd();
-			System.out.println("backward substitutuion done for level: " + i);
+			for (int i = 1; i < a.leaves().get(a.leaves().size() - 1).x.length; ++i) {
+				result[count] = a.leaves().get(a.leaves().size() - 1).x[i];
+				++count;
+			}
+			MatrixUtil.printVector(result);
+			System.out.println();
 
+			Bspline spline = new Bspline(Stuff.knotVector, Stuff.p);
+
+			int s = 1000;
+			double[] x = new double[s];
+			double[] y = new double[s];
+
+			double cus = 0.0;
+			for (int i = 0; i < s; ++i) {
+				x[i] = cus;
+				cus += 1.0 / s;
+				y[i] = spline.evaluate(x[i], result);
+
+			}
+
+			if(it%100==0){
+				ResultPrinter.printResult(x, y);
+
+			}
 		}
 		a.exectuor.shutdown();
-
-		double[] result = new double[A.length];
-
-		int count = 0;
-		for (Vertex node : a.leaves()) {
-			result[count] = node.x[0];
-			++count;
-
-		}
-		for (int i = 1; i < a.leaves().get(a.leaves().size() - 1).x.length; ++i) {
-			result[count] = a.leaves().get(a.leaves().size() - 1).x[i];
-			++count;
-		}
-		MatrixUtil.printVector(result);
-		System.out.println();
-
-		MatrixUtil.printVector(solution);
-		
-		double [] knotVector = Stuff.knotVector;
-		Bspline spline = new Bspline(knotVector, Stuff.p);
-		
-		int s = 1000;
-		double [] x = new double[s];
-		double[] y = new double[s];
-	
-		double cus = 0.0;
-		for(int i=0;i<s;++i){
-			x[i] = cus;
-			cus += 1.0/s;
-			y[i] = spline.evaluate(x[i], result);
-			
-		}
-		
-		ResultPrinter.printResult(x, y);
 
 	}
 

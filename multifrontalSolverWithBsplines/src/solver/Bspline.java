@@ -36,10 +36,28 @@ public class Bspline {
         return d[p][p];
     }
 	
+	
+	
 	public double evaluate(double x, int n){
 		double [] param = new double[Stuff.parametersCount];
 		param[n] = 1;
 		return evaluate(x, param);
+		
+	}
+	
+	public double evaluateDerivative(double x, double [] b){
+		double [] b2 = new double[b.length];
+		for(int i =0;i<b.length-1;++i){
+			b2[i+1] = Stuff.p*(b[i+1]-b[i])/(Stuff.knotVector[i+Stuff.p+1]-Stuff.knotVector[i+1]);
+		}
+		Bspline bspline = new Bspline(Stuff.knotVector, Stuff.p-1);
+		return bspline.evaluate(x, b2);
+	}
+	
+	public double evaluateDerivative(double x , int n){
+		double [] param = new double[Stuff.parametersCount];
+		param[n]  = 1;
+		return evaluateDerivative(x, param);
 		
 	}
     private int findLastDOF(double x) {
